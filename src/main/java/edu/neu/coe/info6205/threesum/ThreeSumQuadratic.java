@@ -15,6 +15,7 @@ import java.util.List;
 public class ThreeSumQuadratic implements ThreeSum {
     /**
      * Construct a ThreeSumQuadratic on a.
+     *
      * @param a a sorted array.
      */
     public ThreeSumQuadratic(int[] a) {
@@ -37,8 +38,23 @@ public class ThreeSumQuadratic implements ThreeSum {
      */
     public List<Triple> getTriples(int j) {
         List<Triple> triples = new ArrayList<>();
-        // FIXME : for each candidate, test if a[i] + a[j] + a[k] = 0.
-        // END 
+        int left = 0, right = length - 1;
+        while (left < j && right > j) {
+            int sum = a[left] + a[j] + a[right];
+            if (sum > 0) {
+                right--;
+            } else if (sum < 0) {
+                left++;
+            } else {
+                triples.add(new Triple(left, j, right));
+                left++;
+                right--;
+                //We can use these codes instead of using "stream().distinct()" to remove duplicate triple
+//                while (left < right && a[left] == a[left - 1]) left++;
+//                while (left < right && a[right] == a[right + 1]) right--;
+            }
+        }
+        // END
         return triples;
     }
 

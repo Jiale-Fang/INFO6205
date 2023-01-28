@@ -1,9 +1,12 @@
 package edu.neu.coe.info6205.threesum;
 
 import edu.neu.coe.info6205.util.Benchmark_Timer;
+import edu.neu.coe.info6205.util.Stopwatch;
 import edu.neu.coe.info6205.util.TimeLogger;
 import edu.neu.coe.info6205.util.Utilities;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -23,19 +26,29 @@ public class ThreeSumBenchmark {
     }
 
     public static void main(String[] args) {
+
         new ThreeSumBenchmark(100, 250, 250).runBenchmarks();
         new ThreeSumBenchmark(50, 500, 500).runBenchmarks();
         new ThreeSumBenchmark(20, 1000, 1000).runBenchmarks();
         new ThreeSumBenchmark(10, 2000, 2000).runBenchmarks();
         new ThreeSumBenchmark(5, 4000, 4000).runBenchmarks();
         new ThreeSumBenchmark(3, 8000, 8000).runBenchmarks();
-        new ThreeSumBenchmark(2, 16000, 16000).runBenchmarks();
     }
 
     private void benchmarkThreeSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
-        if (description.equals("ThreeSumCubic") && n > 4000) return;
-        // FIXME
-        // END 
+        //Because it takes too long to cycle 100 times, the method will not run ThreeSumCubic when n is greater than or equal to 2000
+        if (description.equals("ThreeSumCubic") && n >= 2000) return;
+        long time = 0L;
+        int[] arr = supplier.get();
+        //Cycle 100 times and take the average value
+        for (int i = 0; i < 100; i++) {
+            try (Stopwatch stopwatch = new Stopwatch()) {
+                function.accept(arr);
+                time += stopwatch.lap();
+            }
+        }
+        for (TimeLogger timeLogger : timeLoggers) timeLogger.log(1.0 * time / 100, n);
+        // END
     }
 
     private final static TimeLogger[] timeLoggersCubic = {

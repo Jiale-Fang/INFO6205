@@ -31,7 +31,7 @@ public class ThreeSumQuadraticWithCalipers implements ThreeSum {
      */
     public Triple[] getTriples() {
         List<Triple> triples = new ArrayList<>();
-        Collections.sort(triples); // ???
+        Collections.sort(triples);
         for (int i = 0; i < length - 2; i++)
             triples.addAll(calipers(a, i, Triple::sum));
         return triples.stream().distinct().toArray(Triple[]::new);
@@ -48,7 +48,24 @@ public class ThreeSumQuadraticWithCalipers implements ThreeSum {
      */
     public static List<Triple> calipers(int[] a, int i, Function<Triple, Integer> function) {
         List<Triple> triples = new ArrayList<>();
-        // FIXME : use function to qualify triples and to navigate otherwise.
+        int left = i + 1, right = a.length - 1;
+        while (left < right) {
+            Triple t = new Triple(a[i], a[left], a[right]);
+            int sum = function.apply(t);
+            if (sum > 0) {
+                right--;
+            } else if (sum < 0) {
+                left++;
+            } else {
+                triples.add(t);
+                left++;
+                right--;
+                //We can use these codes instead of using "stream().distinct()" to remove duplicate triple
+//                while (left < right && a[left] == a[left - 1]) left++;
+//                while (left < right && a[right] == a[right + 1]) right--;
+            }
+        }
+
         // END 
         return triples;
     }

@@ -11,17 +11,16 @@ public class BinarySearch {
         System.out.println(res2);
     }
 
-
     static int binarySearch(int[] a, int low, int high, int key) {
         int lo = low;
         int hi = high;
         while (hi >= lo) {
             // FIXME : implement binary search by replacing the following code
+
              return -1;
             // END 
         }
         return -1;
-
     }
 
 
