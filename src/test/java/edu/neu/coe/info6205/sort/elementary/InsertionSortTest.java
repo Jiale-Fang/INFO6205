@@ -5,15 +5,16 @@
 package edu.neu.coe.info6205.sort.elementary;
 
 import edu.neu.coe.info6205.sort.*;
-import edu.neu.coe.info6205.util.Config;
-import edu.neu.coe.info6205.util.LazyLogger;
-import edu.neu.coe.info6205.util.PrivateMethodTester;
-import edu.neu.coe.info6205.util.StatPack;
+import edu.neu.coe.info6205.util.*;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.function.Supplier;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -138,6 +139,35 @@ public class InsertionSortTest {
         System.out.println(statPack);
         assertEquals(inversions, fixes);
     }
+
+    /**
+     * In this method, measure the running times of insertion sort, using four different initial array ordering
+     * situations: random, ordered, partially-ordered and reverse-ordered
+     */
+    @Test
+    public void sortDiffStatusArrays() throws IOException {
+        final Random random = new Random();
+        //Run m times
+        int m = 100;
+
+        Integer[] arr = InsertionSort.initialArr(InsertionSort.RANDOM_ARRAY, 100).get();
+        int len = 2;  //n
+        for (int i = 0; i < 6; i++) {
+            double randomTime = InsertionSort.runBenchmarkTimer(InsertionSort.initialArr(InsertionSort.RANDOM_ARRAY, len), m);
+            double orderedTime = InsertionSort.runBenchmarkTimer(InsertionSort.initialArr(InsertionSort.ORDERED_ARRAY, len), m);
+            double partiallyOrderedTime = InsertionSort.runBenchmarkTimer(InsertionSort.initialArr(InsertionSort.PARTIALLY_ORDERED_ARRAY, len), m);
+            double reverseOrderedTime = InsertionSort.runBenchmarkTimer(InsertionSort.initialArr(InsertionSort.REVERSE_ORDERED_ARRAY, len), m);
+            System.out.println("Arr length:     Random:      \t     Ordered:       Partially Ordered:   Reversed Ordered:");
+            System.out.printf("\t %d \t %.12f \t %.12f \t %.12f \t %.12f", len, randomTime, orderedTime, partiallyOrderedTime, reverseOrderedTime);
+            System.out.println();
+            len *= 2;
+        }
+    }
+
+    private final static TimeLogger[] timeLoggersQuadratic = {
+            new TimeLogger("Raw time per run (mSec): ", (time, n) -> time * n),
+            new TimeLogger("Normalized time per run (n^2): ", (time, n) -> time)
+    };
 
     final static LazyLogger logger = new LazyLogger(InsertionSort.class);
 
