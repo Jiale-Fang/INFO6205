@@ -16,6 +16,7 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class Main {
 
+    //Use five values: 2, 4, 8, 16, 32
     public static int threadCnt = 32;
 
     public static void main(String[] args) {
